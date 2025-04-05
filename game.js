@@ -55,7 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Start game
     function startGame() {
-        if (gameRunning) return;
+        if (gameRunning) {
+            // If game is already running, restart it
+            gameRunning = false;
+            clearInterval(gameInterval);
+        }
         
         gameRunning = true;
         startBtn.textContent = 'Restart Game';
@@ -68,17 +72,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update game state
     function updateGame() {
         // Calculate new head position
-        const headX = snake[0].x + velocityX;
-        const headY = snake[0].y + velocityY;
+        let headX = snake[0].x + velocityX;
+        let headY = snake[0].y + velocityY;
         
-        // Check for collisions
-        if (
-            headX < 0 || 
-            headY < 0 || 
-            headX >= tileCount || 
-            headY >= tileCount ||
-            checkSnakeCollision(headX, headY)
-        ) {
+        // Allow passing through walls (wrap around)
+        if (headX < 0) headX = tileCount - 1;
+        if (headY < 0) headY = tileCount - 1;
+        if (headX >= tileCount) headX = 0;
+        if (headY >= tileCount) headY = 0;
+        
+        // Check for collision with snake body only
+        if (checkSnakeCollision(headX, headY)) {
             gameOver();
             return;
         }
@@ -324,4 +328,3 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize game state
     initGame();
 });
-
