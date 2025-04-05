@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Game constants
     const gridSize = 20;
     const tileCount = canvas.width / gridSize;
+    const INITIAL_GAME_SPEED = 150; // Add this line to store the initial game speed
     
     // Game variables
     let snake = [];
@@ -21,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let velocityY = 0;
     let score = 0;
     let gameInterval;
-    let gameSpeed = 150; // milliseconds
+    let gameSpeed = INITIAL_GAME_SPEED; // Use the initial game speed constant
     let gameRunning = false;
     let gamePaused = false;
 
@@ -67,6 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
         gameRunning = true;
         startBtn.textContent = 'Restart Game';
         pauseBtn.disabled = false;
+        
+        // Reset game speed to initial value
+        gameSpeed = INITIAL_GAME_SPEED;
+        
         initGame();
         
         // Set direction to start moving right automatically
