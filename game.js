@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const leftBtn = document.getElementById('leftBtn');
     const rightBtn = document.getElementById('rightBtn');
     const pauseBtn = document.getElementById('pauseBtn');
+    const stopBtn = document.getElementById('stopBtn');
 
     // Game constants
     const gridSize = 20;
@@ -292,6 +293,28 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.fillText('Score: ' + score, canvas.width / 2, canvas.height / 2 + 15);
     }
 
+    // Stop game function
+    function stopGame() {
+        clearInterval(gameInterval);
+        gameRunning = false;
+        gamePaused = false;
+        
+        // Reset game state completely
+        snake = [];
+        velocityX = 0;
+        velocityY = 0;
+        score = 0;
+        scoreElement.textContent = score;
+        startBtn.textContent = 'Start Game';
+        pauseBtn.disabled = true;
+        pauseBtn.textContent = 'Pause';
+        
+        // Clear canvas
+        ctx.fillStyle = '#eee';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        drawGrid();
+    }
+
     // Handle keyboard controls
     document.addEventListener('keydown', (e) => {
         if (!gameRunning && (e.key === 'ArrowUp' || e.key === 'ArrowDown' || 
@@ -365,6 +388,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add pause button event listener
     pauseBtn.addEventListener('click', togglePause);
     
+    // Add stop button event listener
+    stopBtn.addEventListener('click', stopGame);
+
     // Disable pause button initially
     pauseBtn.disabled = true;
 
