@@ -65,6 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
         startBtn.textContent = 'Restart Game';
         initGame();
         
+        // Set direction to start moving right automatically
+        velocityX = 1;
+        velocityY = 0;
+        
         // Set game loop
         gameInterval = setInterval(updateGame, gameSpeed);
     }
