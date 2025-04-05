@@ -71,9 +71,23 @@ button:hover {
     align-items: center;
 }
 
+#pauseBtn {
+    background-color: #FFC107;
+    color: black;
+}
+
+#pauseBtn:hover {
+    background-color: #FFA000;
+}
+
+#pauseBtn:disabled {
+    background-color: #E0E0E0;
+    color: #888;
+    cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
     .mobile-controls {
         display: flex;
     }
 }
-

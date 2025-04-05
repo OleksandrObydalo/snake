@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const downBtn = document.getElementById('downBtn');
     const leftBtn = document.getElementById('leftBtn');
     const rightBtn = document.getElementById('rightBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
 
     // Game constants
     const gridSize = 20;
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let gameInterval;
     let gameSpeed = 150; // milliseconds
     let gameRunning = false;
+    let gamePaused = false;
 
     // Colors
     const snakeColor = '#4CAF50';
@@ -63,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         gameRunning = true;
         startBtn.textContent = 'Restart Game';
+        pauseBtn.disabled = false;
         initGame();
         
         // Set direction to start moving right automatically
@@ -75,6 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update game state
     function updateGame() {
+        if (gamePaused) return;
+        
         // Calculate new head position
         let headX = snake[0].x + velocityX;
         let headY = snake[0].y + velocityY;
@@ -240,11 +245,39 @@ document.addEventListener('DOMContentLoaded', () => {
         return snake.some(segment => segment.x === x && segment.y === y);
     }
 
+    // Pause game
+    function togglePause() {
+        if (!gameRunning) return;
+
+        gamePaused = !gamePaused;
+        
+        if (gamePaused) {
+            clearInterval(gameInterval);
+            pauseBtn.textContent = 'Resume';
+            
+            // Draw pause overlay
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.font = '30px Arial';
+            ctx.fillStyle = 'white';
+            ctx.textAlign = 'center';
+            ctx.fillText('PAUSED', canvas.width / 2, canvas.height / 2);
+        } else {
+            pauseBtn.textContent = 'Pause';
+            gameInterval = setInterval(updateGame, gameSpeed);
+            drawGame(); // Redraw game state
+        }
+    }
+
     // Game over
     function gameOver() {
         clearInterval(gameInterval);
         gameRunning = false;
+        gamePaused = false;
         startBtn.textContent = 'Start Game';
+        pauseBtn.disabled = true;
+        pauseBtn.textContent = 'Pause';
         
         // Display game over
         ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
@@ -328,6 +361,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (!gameRunning) startGame();
     });
+
+    // Add pause button event listener
+    pauseBtn.addEventListener('click', togglePause);
+    
+    // Disable pause button initially
+    pauseBtn.disabled = true;
 
     // Initialize game state
     initGame();
